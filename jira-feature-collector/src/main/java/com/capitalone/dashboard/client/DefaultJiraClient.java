@@ -71,7 +71,7 @@ public class DefaultJiraClient implements JiraClient {
 		try {			
 			URL url = new URL(featureSettings.getJiraBaseUrl() + featureSettings.getJiraQueryEndpoint() + "status/");
 			HttpURLConnection request = (HttpURLConnection) url.openConnection();
-			request.setRequestProperty("Authorization","Basic " + featureSettings.getJiraCredentials());
+			request.setRequestProperty("Authorization" , "Basic " + featureSettings.getJiraCredentials());
 			request.connect();
 			
 			InputStream in = (InputStream) request.getContent();
@@ -104,7 +104,7 @@ public class DefaultJiraClient implements JiraClient {
 					}
                 }
             } catch (ParseException pe) {
-                LOGGER.error("Parsing jobs on instance", pe);
+                LOGGER.error("Parsing statuses", pe);
             } 
         } catch (org.springframework.web.client.RestClientException rce) {
             LOGGER.error("Client exception loading statuses", rce);
