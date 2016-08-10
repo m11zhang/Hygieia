@@ -42,7 +42,6 @@ import com.capitalone.dashboard.model.FeatureCollector;
 import com.capitalone.dashboard.model.FeatureStatus;
 import com.capitalone.dashboard.repository.FeatureCollectorRepository;
 import com.capitalone.dashboard.repository.FeatureRepository;
-import com.capitalone.dashboard.util.CoreFeatureSettings;
 import com.capitalone.dashboard.util.FeatureCollectorConstants;
 import com.capitalone.dashboard.util.FeatureSettings;
 
@@ -58,10 +57,9 @@ public class StoryDataClientImplTests {
 	private static final IssueType ISSUETYPE1 = new IssueType(URI.create("http://my.jira.com/rest/api/2/issuetype/10"), Long.valueOf(10), "Story", false, "issuetype10", null);
 	
 	private static final Status STATUS_TODO = new Status(URI.create("http://my.jira.com/rest/api/2/status/21"), Long.valueOf(21), "OPEN", "OPEN", null);
-	private static final Status STATUS_IN_PROGRESS = new Status(URI.create("http://my.jira.com/rest/api/2/status/22"), Long.valueOf(22), "IN_PROGRESS", "IN_PROGRESS", null);
+	private static final Status STATUS_IN_PROGRESS = new Status(URI.create("http://my.jira.com/rest/api/2/status/22"), Long.valueOf(22), "IN PROGRESS", "IN PROGRESS", null);
 	private static final Status STATUS_DONE = new Status(URI.create("http://my.jira.com/rest/api/2/status/23"), Long.valueOf(23), "CLOSED", "CLOSED", null);
 	
-	CoreFeatureSettings coreFeatureSettings;
 	FeatureSettings featureSettings;
 	@Mock FeatureRepository featureRepo;
 	@Mock FeatureCollectorRepository featureCollectorRepository;
@@ -72,12 +70,7 @@ public class StoryDataClientImplTests {
 	
 	@Before
 	public final void init() {
-		coreFeatureSettings = new CoreFeatureSettings();
 		featureSettings = new FeatureSettings();
-		
-		coreFeatureSettings.setTodoStatuses(Arrays.asList("OPEN"));
-		coreFeatureSettings.setDoingStatuses(Arrays.asList("IN_PROGRESS"));
-		coreFeatureSettings.setDoneStatuses(Arrays.asList("CLOSED"));
 		
 		featureSettings.setJiraIssueTypeId("Story");
 		featureSettings.setJiraSprintDataFieldName("custom_sprint");
@@ -85,8 +78,10 @@ public class StoryDataClientImplTests {
 		featureSettings.setJiraStoryPointsFieldName("custom_storypoints");
 		featureSettings.setDeltaStartDate("2016-03-01T00:00:00.000000");
 		featureSettings.setPageSize(25);
+		featureSettings.setJiraBaseUrl("https://jira.atlassian.com/");
+		featureSettings.setJiraQueryEndpoint("rest/api/latest/");
 		
-		storyDataClient = new StoryDataClientImpl(coreFeatureSettings, featureSettings, featureRepo, featureCollectorRepository, jiraClient);
+		storyDataClient = new StoryDataClientImpl(featureSettings, featureRepo, featureCollectorRepository, jiraClient);
 		
 		FeatureCollector jira = new FeatureCollector();
 		jira.setId(JIRA_COLLECTORID);
@@ -229,7 +224,7 @@ public class StoryDataClientImplTests {
 		assertEquals("summary1002", feature1.getsEpicName());
 		assertEquals(dateLocal("2016-06-24T03:32:08.322-00:00") + "0000", feature1.getsEpicBeginDate());
 		assertEquals(dateLocal("2016-07-17T07:05:28.322-00:00") + "0000", feature1.getsEpicEndDate());
-		assertEquals("IN_PROGRESS", feature1.getsEpicAssetState());
+		assertEquals("IN PROGRESS", feature1.getsEpicAssetState());
 		
 		assertNotNull(feature1.getsEpicType());
 		assertNotNull(feature1.getsEpicChangeDate());
